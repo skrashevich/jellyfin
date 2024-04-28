@@ -423,6 +423,68 @@ namespace Emby.Naming.Common
                 {
                     IsNamed = true
                 },
+                new EpisodeExpression(@"[Ss]erija[\. _](?<epnumber>[0-9]+)")
+                {
+                    IsNamed = true
+                },
+                new EpisodeExpression(@"(?<epnumber>[0-9]+)[ _]+[Сс]ерия")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: 'Seria 01 - Bez prikrytiya.mkv'
+                new EpisodeExpression(@"[Ss]eria[ _](?<epnumber>[0-9]+)")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: 'Bez prikrytiya - Sezon 1 Seria 01.mkv'
+                new EpisodeExpression(@"[Ss]ezon[ _](?<seasonnumber>[0-9]+)[ _][Ss]eria[ _](?<epnumber>[0-9]+)")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: '01 серия_Без прикрытия_rip by_Aleksan55.mkv'
+                new EpisodeExpression(@"(?<epnumber>[0-9]+)[ _]+[сС]ерия")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: 'Серия 01 - Без прикрытия.mkv'
+                new EpisodeExpression(@"[сС]ерия[ _](?<epnumber>[0-9]+)")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: 'Без прикрытия - Сезон 1 Серия 01.mkv'
+                new EpisodeExpression(@"[сС]езон[ _](?<seasonnumber>[0-9]+)[ _][сС]ерия[ _](?<epnumber>[0-9]+)")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: 'Без прикрытия S01E01.mkv'
+                new EpisodeExpression(@"S(?<seasonnumber>[0-9]{2})E(?<epnumber>[0-9]{2})")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: 'Без прикрытия 1x01.mkv'
+                new EpisodeExpression(@"(?<seasonnumber>[0-9]+)x(?<epnumber>[0-9]+)")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: '01. Без прикрытия.mkv'
+                new EpisodeExpression(@"(?<epnumber>[0-9]+)\.")
+                {
+                    IsNamed = true
+                },
+
+                // Pattern: 'Без прикрытия - 01 - Название эпизода.mkv'
+                new EpisodeExpression(@"-\s*(?<epnumber>[0-9]+)\s*-")
+                {
+                    IsNamed = true
+                },
             };
 
             EpisodeWithoutSeasonExpressions = new[]
