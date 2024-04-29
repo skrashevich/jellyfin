@@ -43,10 +43,12 @@ do_build_native() {
 }
 
 do_build_docker() {
-    if [[ -f $( which dpkg ) && $( dpkg --print-architecture | head -1 ) != "amd64" ]]; then
-        echo "Docker-based builds only support amd64-based cross-building; use a 'native' build instead."
+    # Check for Docker Buildx support
+    if ! docker buildx ls >/dev/null 2>&1; then
+        echo "Docker Buildx is not available. Please install it to use cross-platform building features."
         exit 1
     fi
+
     if [[ ! -f deployment/Dockerfile.${PLATFORM} ]]; then
         echo "Missing Dockerfile for platform ${PLATFORM}"
         exit 1
@@ -57,7 +59,8 @@ do_build_docker() {
         docker_args="--rm"
     fi
 
-    docker build . -t "jellyfin-builder.${PLATFORM}" -f deployment/Dockerfile.${PLATFORM}
+    # Use Docker Buildx to build for ubuntu/amd64 from arm64 macOS
+    docker buildx build . --platform linux/amd64 -t "jellyfin-builder.${PLATFORM}" -f deployment/Dockerfile.${PLATFORM} --load
     mkdir -p ${ARTIFACT_DIR}
     docker run $docker_args -v "${SOURCE_DIR}:/jellyfin" -v "${ARTIFACT_DIR}:/dist" "jellyfin-builder.${PLATFORM}"
 }
